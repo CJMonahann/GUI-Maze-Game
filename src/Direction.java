@@ -1,3 +1,8 @@
+import javafx.application.Application;
+import javafx.scene.Scene;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
+
 /**
  * This class has four static constants that can be used as 
  * indices for doors array be the classes calling setDoor and 
