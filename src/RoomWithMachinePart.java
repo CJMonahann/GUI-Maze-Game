@@ -23,8 +23,8 @@ public class RoomWithMachinePart extends Room{
 	 * Returns the machine part held in the part-room
 	 * @return machinePart
 	 */
-	public Part getPart() {
-		return this.machinePart;
+	public int getPart() {
+		return this.machinePart.getNumber();
 	}
 	/**
 	 * Checks the last part collected by a Player to see if this room's
@@ -34,7 +34,7 @@ public class RoomWithMachinePart extends Room{
 	 * @return machine part if next to be collected, else returns null
 	 */
 	public Part collectPart(Player obj) {
-		if(obj.getCollectedPart() < this.getPart()) {
+		if(machinePart.getNumber() - obj.getLastPartCollected() == 1) {
 			return this.machinePart;
 		}
 		else {
