@@ -1,7 +1,7 @@
 
 public class Player {
 	
-	@SuppressWarnings("unused")
+	
 	private int number;
 	private Room currentRoom;
 	private boolean toolsCollected;
@@ -13,54 +13,62 @@ public class Player {
 		this.toolsCollected = false;
 	}
 	
-	public int getCurrentRoom() {
-		return this.currentRoom.getNumber();
+	public Room getCurrentRoom() {
+		return this.currentRoom;
 	}
-	public int getLastPartCollected() {
-		return this.lastMachinePartCollected.getNumber();
+	public Part getLastPartCollected() {
+		return this.lastMachinePartCollected;
+	}
+	public int getPlayerNum() {
+		return this.number;
 	}
 	public boolean hasTools() {
 		return toolsCollected; //FIXME: this may be wrong?
 	}
 	
-	public void move(int direction) throws Exception{ //FIXME: this may be wrong as well?
-		if(currentRoom.getDoor(direction) != null) {
-			currentRoom.setDoor(direction, currentRoom);
-			currentRoom.printMessage();
+	public String move(int direction) throws Exception{ //FIXME: this may be wrong as well?
+		Room roomDirect = currentRoom.getDoor(direction);
+		if(roomDirect != null) {
+			currentRoom.setDoor(roomDirect.getNumber(), currentRoom);
+			return currentRoom.printMessage();
 		}
 		else {
-			System.out.print("No door in this direction");
+			return "No door in this direction";
+		}
+		
+	}
+	public String collectPart() {
+		if(currentRoom.hasPart()) { //FIXME: wrong, another condition must be met
+			return "should have a part";
+		}
+		else {
+			return "This room doesn't have a part";
 		}
 	}
-	public void collectPart() {
-		if(currentRoom.hasPart() && lastMachinePartCollected.isNext(lastMachinePartCollected)) { //FIXME: wrong, another condition must be met
-			System.out.print("FIXME: needs to be a new part");
-		}
-	}
-	public void collectTools() {
+	public String collectTools() {
 		if(currentRoom.hasTools() && !toolsCollected) {
 			this.toolsCollected = true;
-			System.out.print("You have successfully collected tools");
+			return "You have successfully collected tools";
 		}
 		else if(toolsCollected) {
-			System.out.print("Tools already collected");
+			return "Tools already collected";
 		}
 		else {
-			System.out.print("Room does not have tools");
+			return "Room does not have tools";
 		}
 	}
-	public void build() {
+	public String build() {
 		if(lastMachinePartCollected.isLastPart() && toolsCollected && currentRoom.isWorkshop()) {
-			System.out.print("CONGRATULATIONS: you have won the game!");
+			return "CONGRATULATIONS: you have won the game!";
 		}
-		else if (lastMachinePartCollected.isLastPart() && toolsCollected && !currentRoom.isWorkshop()){
-			System.out.print("You are not in the workshop");
+		else if (lastMachinePartCollected.isLastPart() && toolsCollected){
+			return "You are not in the workshop";
 		}
-		else if(lastMachinePartCollected.isLastPart() && !toolsCollected && currentRoom.isWorkshop()) {
-			System.out.print("You don't have the tools");
+		else if(lastMachinePartCollected.isLastPart() && currentRoom.isWorkshop()) {
+			return "You don't have the tools";
 		}
 		else {
-			System.out.print("You don't have all the parts");
+			return "You don't have all the parts";
 		}
 	}
 }

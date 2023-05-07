@@ -34,7 +34,8 @@ public class RoomWithMachinePart extends Room{
 	 * @return machine part if next to be collected, else returns null
 	 */
 	public Part collectPart(Player obj) {
-		if(machinePart.getNumber() - obj.getLastPartCollected() == 1) {
+		Part currPart= obj.getLastPartCollected();
+		if(machinePart.isNext(currPart)) {
 			return this.machinePart;
 		}
 		else {
