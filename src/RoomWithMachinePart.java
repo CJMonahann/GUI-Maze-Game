@@ -23,8 +23,8 @@ public class RoomWithMachinePart extends Room{
 	 * Returns the machine part held in the part-room
 	 * @return machinePart
 	 */
-	public int getPart() {
-		return this.machinePart.getNumber();
+	public Part getPart() {
+		return this.machinePart;
 	}
 	/**
 	 * Checks the last part collected by a Player to see if this room's

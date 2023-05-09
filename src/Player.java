@@ -5,7 +5,8 @@ public class Player {
 	private int number;
 	private Room currentRoom;
 	private boolean toolsCollected;
-	private Part lastMachinePartCollected;
+	private Part lastMachinePartCollected = new Part(0); //initialize to irrelevant part so that it isn't null
+	public static boolean endGame = false; //to signal if game should be ended during build event in class Maze
 	
 	public Player(int number, Room room) {
 		this.number = number;
@@ -23,13 +24,13 @@ public class Player {
 		return this.number;
 	}
 	public boolean hasTools() {
-		return toolsCollected; //FIXME: this may be wrong?
+		return toolsCollected;
 	}
 	
-	public String move(int direction) throws Exception{ //FIXME: this may be wrong as well?
+	public String move(int direction) throws Exception{
 		Room roomDirect = currentRoom.getDoor(direction);
 		if(roomDirect != null) {
-			currentRoom.setDoor(roomDirect.getNumber(), currentRoom);
+			currentRoom = roomDirect;
 			return currentRoom.printMessage();
 		}
 		else {
@@ -38,37 +39,52 @@ public class Player {
 		
 	}
 	public String collectPart() {
-		if(currentRoom.hasPart()) { //FIXME: wrong, another condition must be met
-			return "should have a part";
+		if(!currentRoom.hasPart()) {
+			return "This room does not have a part";
 		}
 		else {
-			return "This room doesn't have a part";
+			Part nextPart = ((RoomWithMachinePart)currentRoom).getPart();
+			if(nextPart.getNumber() <= lastMachinePartCollected.getNumber()) {
+				return "You've already collected this part";
+			}
+			else if(!nextPart.isNext(lastMachinePartCollected)) {
+				return "The parts must be collected in order";
+			}
+			else {
+				lastMachinePartCollected = nextPart;
+				return "You've sucessfully collected the part!";
+			}
 		}
 	}
 	public String collectTools() {
-		if(currentRoom.hasTools() && !toolsCollected) {
-			this.toolsCollected = true;
-			return "You have successfully collected tools";
-		}
-		else if(toolsCollected) {
-			return "Tools already collected";
+		if(!currentRoom.hasTools()) {
+			return "This room has no tools";
 		}
 		else {
-			return "Room does not have tools";
+			if(toolsCollected) {
+				return "Tools already collected";
+			}
+			else {
+				toolsCollected = true;
+				return "You've sucessfully collected the tools";
+			}
 		}
 	}
 	public String build() {
-		if(lastMachinePartCollected.isLastPart() && toolsCollected && currentRoom.isWorkshop()) {
-			return "CONGRATULATIONS: you have won the game!";
-		}
-		else if (lastMachinePartCollected.isLastPart() && toolsCollected){
+		if(!currentRoom.isWorkshop()) {
 			return "You are not in the workshop";
 		}
-		else if(lastMachinePartCollected.isLastPart() && currentRoom.isWorkshop()) {
-			return "You don't have the tools";
-		}
 		else {
-			return "You don't have all the parts";
+			if(!toolsCollected) {
+				return "You don't have the tools";
+			}
+			else if(lastMachinePartCollected.getNumber() != Part.LAST_PART) {
+				return "You don't have all the parts";
+			}
+			else {
+				endGame = true; //signal that game should be ended. Boolean evaluated in class Maze
+				return "Congratulations! You've won the game!";
+			}
 		}
 	}
 }

@@ -2,7 +2,7 @@
 public class Part {
 
     private int number;
-    private static final int LAST_PART = 4;
+    public static final int LAST_PART = 4;
 
     public Part(int number) {
         this.number = number;
