@@ -110,6 +110,17 @@ public class Player {
 			}
 		}
 	}
+	/**
+	 * Builds the machine with the collected parts and tools in the workshop.
+	 * If the required tools/parts are not collected by the player, a message will
+	 * be displayed indicating that the necessary tools/parts are absent.
+	 * If the player is not present in the workshop, a message will appear
+	 * indicating that they are not in the workshop. 
+	 * Once the player collects all of the required tools and machine parts to be built, 
+	 * the player wins, and the game will end.
+	 * 
+	 * @return String message indicating whether the build was successful or not.
+	 */
 	public String build() {
 		if(!currentRoom.isWorkshop()) {
 			return "You are not in the workshop";
