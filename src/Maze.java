@@ -59,7 +59,7 @@ public class Maze extends Application {
 	public void start(Stage appStage) {
 		//create grid pane and style
 		GridPane pane = new GridPane();
-		Insets padding = new Insets(30,30,30,30);
+		Insets padding = new Insets(50,50,50,50);
 		pane.setPadding(padding);
 		pane.setVgap(10.0);
 		pane.setHgap(2.0);
@@ -100,6 +100,13 @@ public class Maze extends Application {
 		Button restart = new Button("Restart");
 		//add all button arrays into an array
 		Button[][] allBttns = {Up,Left,Right,Down,Part,Tools,Build,Help};
+		//make all buttons the same width
+		for(int i = 0; i < allBttns.length; i++) {
+			for(int j = 0; j < allBttns[i].length; j++) {
+				allBttns[i][j].setPrefWidth(120.0);
+			}
+		}
+		restart.setPrefWidth(120.0);
 		//add first player's elements to grid pane
 		pane.add(player1, 1, 0);
 		pane.add(Up[0], 1, 1);
@@ -262,7 +269,6 @@ public class Maze extends Application {
 			class RestartHandler implements EventHandler<ActionEvent> { //FIXME: needs work
 				// Boolean flag used to track if the button is clicked.
 				private boolean clickedOnce = false;
-
 				// Define the timeout period for the restart confirmation.
 				// Delete this method if you do not want restart confirmation.
 				private Timeline resetTimeline = new Timeline(
@@ -291,8 +297,7 @@ public class Maze extends Application {
 					} else {
 						// Restarts the game
 						start(appStage);
-						System.out.println("The game has been restarted.");
-
+						Player.endGame = false; //change back to false so that disableAll isn't falsely called
 						// Change the text of the button back to "Restart"
 						((Button) event.getSource()).setText("Restart");
 						clickedOnce = false;
