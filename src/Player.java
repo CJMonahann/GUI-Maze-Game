@@ -1,4 +1,11 @@
-
+/**
+ * A class representing the player in the Maze game. It contains
+ * information about the player's number, current room, and
+ * whether they have collected the necessary tools and machine parts
+ * to build the machine or not in order to win the game.
+ * @author CJ and Jose
+ * @version 1.0
+ */
 public class Player {
 	
 	
@@ -13,20 +20,41 @@ public class Player {
 		this.currentRoom = room;
 		this.toolsCollected = false;
 	}
-	
+	/**
+	 * Returns the room number the player is in.
+	 * @return Room the current room
+	 */
 	public Room getCurrentRoom() {
 		return this.currentRoom;
 	}
+	/**
+	 * Returns the last machine part collected by the player.
+	 * @return Part the last machine part collected
+	 */
 	public Part getLastPartCollected() {
 		return this.lastMachinePartCollected;
 	}
+	/**
+	 * Returns the player's number.
+	 * @return the player's number
+	 */
 	public int getPlayerNum() {
 		return this.number;
 	}
+	/**
+	 * Returns true if the player has collected the tools. Otherwise, false.
+	 * @return boolean
+	 */
 	public boolean hasTools() {
 		return toolsCollected;
 	}
-	
+	/**
+	 * "Moves" the player a given direction by indexing their current room for the 
+	 * next room object in the rooms array of class Game.
+	 * @param direction the direction to move
+	 * @return String the message indicating the result of the move
+	 * @throws Exception throws an Exception if the direction is invalid
+	 */
 	public String move(int direction) throws Exception{
 		Room roomDirect = currentRoom.getDoor(direction);
 		if(roomDirect != null) {
@@ -38,6 +66,12 @@ public class Player {
 		}
 		
 	}
+	/**
+	 * Collects the machine part from the current room if it exists to store
+	 * in the player's inventory. If the machine part has already been collected,
+	 * or if the parts are not collected in order, it notifies the user.
+	 * @return String
+	 */
 	public String collectPart() {
 		if(!currentRoom.hasPart()) {
 			return "This room does not have a part";
@@ -56,6 +90,12 @@ public class Player {
 			}
 		}
 	}
+	/**
+	 * Collects the tools from the current room if it exists to store
+	 * in the player's inventory. If the tools have already been collected,
+	 * it notifies the user.
+	 * @return String
+	 */
 	public String collectTools() {
 		if(!currentRoom.hasTools()) {
 			return "This room has no tools";

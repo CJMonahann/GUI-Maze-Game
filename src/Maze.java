@@ -1,3 +1,5 @@
+import javafx.animation.Timeline;
+import javafx.animation.KeyFrame;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -8,9 +10,20 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
+/**
+ * This class represents the GUI for the two-player Maze game.
+ * @author CJ and Jose
+ * @version 1.0
+ */
 public class Maze extends Application {
-	
+	/**
+	 * This method changes the status of the game by switching the
+	 * current player and enabling their buttons.
+	 * @param game   the game being played
+	 * @param button the array of buttons for each player
+	 */
 	public void changeStatus(Game game, Button[][] button) {
 		Player currPlayer = game.getCurrentPlayer();
 		int numPlayer = currPlayer.getPlayerNum() - 1;
@@ -26,6 +39,10 @@ public class Maze extends Application {
 			button[i][numPlayer].setDisable(false);
 		}
 	}
+	/**
+	 * This method disables all buttons on the interface.
+	 * @param button the array of buttons for each player
+	 */
 	public void disableAll(Button[][] button) {
 		for(int i = 0; i < button.length; i++) {
 			for(int j = 0; j < button[i].length; j++) {
@@ -33,6 +50,11 @@ public class Maze extends Application {
 			}
 		}
 	}
+	/**
+	 * This method creates the graphical interface for the maze game using a
+	 * GridPane layout and various elements.
+	 * @param appStage the primary stage for the application
+	 */
 	@Override
 	public void start(Stage appStage) {
 		//create grid pane and style
@@ -69,9 +91,9 @@ public class Maze extends Application {
 		Build[1] = new Button("Build Machine");
 		Help[0] = new Button("Help! I am lost!!");
 		Help[1] = new Button("Help! I am lost!!");
-		playerText[0] = new TextField("Welcome 1");
+		playerText[0] = new TextField("Starting in Room 1");
 		playerText[0].setEditable(false);
-		playerText[1] = new TextField("Welcome 2");
+		playerText[1] = new TextField("Starting in Room 1");
 		playerText[1].setEditable(false);
 		Label player1 = new Label("PLAYER 1");
 		Label player2 = new Label("PLAYER 2");
@@ -114,7 +136,9 @@ public class Maze extends Application {
 			appStage.setScene(scene);
 			appStage.setTitle("Maze Game");
 			appStage.show();
-			
+			/**
+			 * This class handles the action event when the Up button is pressed.
+			 */
 			class UpHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -129,6 +153,9 @@ public class Maze extends Application {
 					changeStatus(mazeGame,allBttns);
 				}
 			}
+			/**
+			 * This class handles the action event when the Right button is pressed.
+			 */
 			class RightHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -143,6 +170,9 @@ public class Maze extends Application {
 					changeStatus(mazeGame,allBttns);
 				}
 			}
+			/**
+			 * This class handles the action event when the Down button is pressed.
+			 */
 			class DownHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -157,6 +187,9 @@ public class Maze extends Application {
 					changeStatus(mazeGame,allBttns);
 				}
 			}
+			/**
+			 * This class handles the action event when the Left button is pressed.
+			 */
 			class LeftHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -171,6 +204,9 @@ public class Maze extends Application {
 					changeStatus(mazeGame,allBttns);
 				}
 			}
+			/**
+			 * This class handles the action event when the Part button is pressed.
+			 */
 			class PartHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -180,6 +216,9 @@ public class Maze extends Application {
 					changeStatus(mazeGame,allBttns);
 				}
 			}
+			/**
+			 * This class handles the action event when the Tools button is pressed.
+			 */
 			class ToolsHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -189,6 +228,9 @@ public class Maze extends Application {
 					changeStatus(mazeGame,allBttns);
 				}
 			}
+			/**
+			 * This class handles the action event when the Build button is pressed.
+			 */
 			class BuildHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -203,6 +245,9 @@ public class Maze extends Application {
 					}
 				}
 			}
+			/**
+			 * This class handles the action event when the Help button is pressed.
+			 */
 			class HelpHandler implements EventHandler<ActionEvent> {
 				@Override
 				public void handle(ActionEvent event) {
@@ -211,11 +256,48 @@ public class Maze extends Application {
 					playerText[numPlayer].setText(currPlayer.getCurrentRoom().helpMessage());
 				}
 			}
+			/**
+			 * This class handles the action event when the Restart button is pressed.
+			 */
 			class RestartHandler implements EventHandler<ActionEvent> { //FIXME: needs work
+				// Boolean flag used to track if the button is clicked.
+				private boolean clickedOnce = false;
+
+				// Define the timeout period for the restart confirmation.
+				// Delete this method if you do not want restart confirmation.
+				private Timeline resetTimeline = new Timeline(
+						new KeyFrame(Duration.seconds(5), e -> {
+							((Button) e.getSource()).setText("Restart");
+							clickedOnce = false;
+						}));
+
 				@Override
 				public void handle(ActionEvent event) {
-					@SuppressWarnings("unused")
-					String placeholder = "Empty body for now";
+					//
+					if (!clickedOnce) {
+						// Confirmation of restarting the game.
+						((Button) event.getSource()).setText("Are you sure?");
+						clickedOnce = true;
+
+						// Confirmation timeout if the button has not been pressed.
+						// Delete this method if you do not want restart confirmation.
+						resetTimeline.stop();
+						resetTimeline.getKeyFrames().setAll(new KeyFrame(Duration.seconds(5), e -> {
+							((Button) event.getSource()).setText("Restart");
+							clickedOnce = false;
+						}));
+						resetTimeline.play();
+
+					} else {
+						// Restarts the game
+						start(appStage);
+						System.out.println("The game has been restarted.");
+
+						// Change the text of the button back to "Restart"
+						((Button) event.getSource()).setText("Restart");
+						clickedOnce = false;
+
+					}
 				}
 			}
 			//attach all handlers to buttons
@@ -237,6 +319,11 @@ public class Maze extends Application {
 		}
 		
 	}
+	/**
+	 * The main method which is the entry point of the GUI application.
+	 * Launches the application.
+	 * @param args command line arguments
+	 */
 	public static void main(String[] args) {
 		launch(args); //launch the application
 	}

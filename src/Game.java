@@ -4,6 +4,7 @@
  * This class holds the whole game and its components (the two players and 10 rooms). 
  * This class should be instantiated in the main application class 
  * @author CJ and Jose
+ * @version 1.0
  */
 
 public class Game {
