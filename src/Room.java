@@ -45,7 +45,6 @@ public class Room {
 	    * getter method. Returns number
 	    * @return int
 	    */
-
 	public int getNumber() {
 		return number;
 	}
