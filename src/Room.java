@@ -74,7 +74,7 @@ public class Room {
 	    * @return boolean
 	    */
 	
-	public boolean isWorkshop () {
+	public boolean isWorkshop() {
 		return false;
 	}
 	   /**
