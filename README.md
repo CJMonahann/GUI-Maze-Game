@@ -16,3 +16,6 @@ RULES:
     - The tools (located in one room) must be collected before the machine is built.
     - The machine can only be built in the workshop.
     - The game is won by the first player to successfully build the machine in the workshop.
+    
+ A simple UML Diagram has been provided in JPEG form to better help visualize the various classes and
+ components of the game.
